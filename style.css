@@ -16,6 +16,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -27,8 +28,13 @@ body {
     radial-gradient(circle at bottom right, rgba(91, 133, 194, 0.12), transparent 22%),
     var(--bg);
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
 }
 
 .bg-shape {
@@ -41,16 +47,16 @@ body {
 }
 
 .shape-1 {
-  width: 240px;
-  height: 240px;
+  width: clamp(160px, 24vw, 240px);
+  height: clamp(160px, 24vw, 240px);
   background: rgba(31, 77, 143, 0.12);
   top: -60px;
   right: -40px;
 }
 
 .shape-2 {
-  width: 220px;
-  height: 220px;
+  width: clamp(150px, 22vw, 220px);
+  height: clamp(150px, 22vw, 220px);
   background: rgba(91, 133, 194, 0.12);
   left: -40px;
   bottom: 60px;
@@ -61,7 +67,7 @@ body {
   z-index: 1;
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 48px 0 40px;
+  padding: clamp(16px, 3vw, 48px) 0 max(24px, env(safe-area-inset-bottom));
 }
 
 .card {
@@ -76,9 +82,9 @@ body {
 .hero {
   display: grid;
   grid-template-columns: minmax(280px, 420px) 1fr;
-  gap: 40px;
+  gap: clamp(20px, 3vw, 40px);
   align-items: center;
-  padding: 34px;
+  padding: clamp(18px, 3vw, 34px);
 }
 
 .hero__media,
@@ -119,6 +125,7 @@ h1 {
   margin: 18px 0 10px;
   font-size: clamp(2rem, 4vw, 3.8rem);
   line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 .subtitle {
@@ -132,7 +139,7 @@ h1 {
   margin: 0;
   max-width: 60ch;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: clamp(0.98rem, 1.4vw, 1rem);
   line-height: 1.8;
 }
 
@@ -144,13 +151,14 @@ h1 {
 }
 
 .info-item {
-  padding: 18px 18px;
+  padding: 18px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.68);
   border: 1px solid var(--line);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .label {
@@ -186,6 +194,10 @@ h1 {
   cursor: pointer;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {
@@ -229,7 +241,7 @@ h1 {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 24px;
+  bottom: max(20px, calc(20px + env(safe-area-inset-bottom)));
   transform: translateX(-50%) translateY(20px);
   background: rgba(24, 32, 42, 0.92);
   color: #fff;
@@ -240,6 +252,8 @@ h1 {
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
   z-index: 20;
+  max-width: calc(100vw - 32px);
+  text-align: center;
 }
 
 .toast.show {
@@ -250,12 +264,9 @@ h1 {
 @media (max-width: 1024px) {
   .page {
     width: min(100% - 28px, 960px);
-    padding-top: 28px;
   }
 
   .hero {
-    gap: 28px;
-    padding: 26px;
     grid-template-columns: minmax(220px, 340px) 1fr;
   }
 
@@ -265,21 +276,27 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --radius: 20px;
+  }
+
   .page {
     width: min(100% - 20px, 720px);
-    padding-top: 20px;
-    padding-bottom: 24px;
+    padding-top: max(14px, env(safe-area-inset-top));
   }
 
   .hero {
     grid-template-columns: 1fr;
-    padding: 20px;
     gap: 22px;
   }
 
   .photo-wrap {
-    max-width: 420px;
+    max-width: min(420px, 100%);
     margin: 0 auto;
+  }
+
+  .hero__content {
+    text-align: left;
   }
 
   .info-grid {
@@ -297,12 +314,23 @@ h1 {
 }
 
 @media (max-width: 480px) {
-  .hero {
-    padding: 16px;
+  .page {
+    width: min(100% - 16px, 100%);
   }
 
+  .hero {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .tag {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .info-item,
   .highlight-card {
-    padding: 18px;
+    padding: 16px;
   }
 
   .intro,
